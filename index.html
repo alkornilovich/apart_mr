@@ -782,7 +782,7 @@ const Local=L.GridLayer.extend({createTile(c,done){const cv=document.createEleme
  if(im.complete&&im.naturalWidth){draw();setTimeout(()=>done(null,cv),0)}else{im.addEventListener('load',()=>{draw();done(null,cv)},{once:true});im.addEventListener('error',()=>done(null,cv),{once:true})}
  return cv}});
 const base=new Local({maxZoom:18,keepBuffer:6,updateWhenZooming:false}).addTo(map);window._useLocal=1;
-function loadTiles(name){if(!window._useLocal)return;if(window.TILES_EMBED&&TILES_EMBED[name]){Object.assign(TB,TILES_EMBED[name]);base.redraw();return}if(TBL[name])return TBL[name];TBL[name]=fetch('tiles/'+name+'.json').then(r=>r.ok?r.json():{}).then(j=>{Object.assign(TB,j);base.redraw()}).catch(()=>{});return TBL[name]}
+function loadTiles(name){if(!window._useLocal)return;if(window.TILES_EMBED&&TILES_EMBED[name]){Object.assign(TB,TILES_EMBED[name]);base.redraw();return}if(TBL[name])return TBL[name];TBL[name]=fetch('tiles/'+name+'.json').then(r=>r.ok?r.json():fetch(name+'.json').then(q=>q.ok?q.json():{})).then(j=>{Object.assign(TB,j);base.redraw()}).catch(()=>{});return TBL[name]}
 loadTiles('overview');
 const ramp=['#2c7bb6','#00a6ca','#00ccbc','#90eb9d','#f9d057','#f29e2e','#e76818','#d7191c'];
 const priceColor=p=>ramp[Math.min(7,Math.floor(Math.min(1,Math.max(0,(p-2000)/16000))*8))];
