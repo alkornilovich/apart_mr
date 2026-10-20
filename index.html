@@ -674,7 +674,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .wrap{display:grid;grid-template-columns:470px 1fr;height:100vh}
 aside{overflow-y:auto;padding:26px 26px 48px;border-right:1px solid var(--line)}
 .right{display:grid;grid-template-rows:1fr auto;min-height:0;height:100vh}
-#mapbox{position:relative;min-height:0}#map{height:100%;width:100%;background:#f2efe9}
+#mapbox{position:relative;min-height:0}#map{height:100%;width:100%;background:#f2efe9}@media (prefers-color-scheme:dark){#map{background:#242424}}
 #charts{border-top:1px solid var(--line);padding:16px 22px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:26px;max-height:46vh;overflow:auto}
 #charts h3{margin:0 0 4px;font-size:15px;font-weight:800}
 h1{font-size:28px;line-height:1.05;letter-spacing:-.02em;margin:0 0 10px;font-weight:800}
@@ -682,7 +682,7 @@ h1{font-size:28px;line-height:1.05;letter-spacing:-.02em;margin:0 0 10px;font-we
 .label{font-size:15px;color:var(--ink);margin:24px 0 9px;font-weight:800}
 .tabs{display:flex;flex-wrap:wrap;gap:4px 18px}
 .tabs button{all:unset;cursor:pointer;font-size:18px;font-weight:700;color:var(--muted);padding-bottom:3px;border-bottom:2px solid transparent}
-.tabs button.on{color:var(--ink);border-color:var(--ink)}
+.tabs button.on{color:var(--ink);border-color:var(--ink)}.tabs button{display:inline-flex;align-items:center;gap:7px}.tabs .arm{height:24px;width:auto;opacity:.5;transition:opacity .15s}.tabs button.on .arm,.tabs button:hover .arm{opacity:1}
 .opts{display:flex;flex-wrap:wrap;gap:7px 16px;font-size:14px}.opts label{cursor:pointer;display:flex;align-items:center;gap:7px}.opts input{accent-color:var(--ink)}
 .same{margin-top:18px;font-size:16px;font-weight:800;display:flex;gap:10px;align-items:center;cursor:pointer}
 .same input{width:18px;height:18px;margin:0;accent-color:var(--ink)}
@@ -807,7 +807,10 @@ let city=0,kind='all',pmode='any',colorMode='pl',maxp=30000,on=[1,1,1,1,1,1],sam
 let P=[],G=[],cache={};
 const map=L.map('map',{preferCanvas:true,zoomControl:true});
 map.attributionControl.remove();
-const base=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{maxNativeZoom:16,maxZoom:19,keepBuffer:2,updateWhenIdle:true,updateWhenZooming:false,crossOrigin:true}).addTo(map);
+const ESRI=t=>`https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${t}_Gray_Base/MapServer/tile/{z}/{y}/{x}`;
+const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;const isDark=()=>!!(mq&&mq.matches);
+const base=L.tileLayer(ESRI(isDark()?'Dark':'Light'),{maxNativeZoom:16,maxZoom:19,keepBuffer:2,updateWhenIdle:true,updateWhenZooming:false,crossOrigin:true}).addTo(map);
+if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{base.setUrl(ESRI(isDark()?'Dark':'Light'));document.getElementById('map').style.background=isDark()?'#242424':'#f2efe9'});
 L.control.attribution({prefix:false,position:'bottomright'}).addAttribution('© Esri, HERE, OpenStreetMap').addTo(map);
 function loadTiles(){}
 const ramp=['#2c7bb6','#00a6ca','#00ccbc','#90eb9d','#f9d057','#f29e2e','#e76818','#d7191c'];
@@ -845,7 +848,8 @@ async function load(ci){loadTiles(DATA.cities[ci][0]);if(cache[ci])return cache[
 const bkey=p=>Math.round(p[1]*4000)+'_'+Math.round(p[2]*2400);
 const nm=p=>{if(p[8])return esc(p[8]);const a=[p[6]>=0?(p[6]===0?'Студия':p[6]+'-комн.'):'Квартира',p[7]?p[7]+' м²':''].filter(Boolean);return a.join(', ')};
 const cb=document.getElementById('cities');
-DATA.cities.forEach((c,i)=>{const b=document.createElement('button');b.textContent=c[1];b.onclick=()=>{city=i;go(true)};cb.appendChild(b)});
+const ARMS={"moscow": "1/17/Coat_of_arms_of_Moscow.svg/120px-Coat_of_arms_of_Moscow.svg.png", "spb": "c/cd/Coat_of_arms_of_Saint_Petersburg_%282003%29.svg/120px-Coat_of_arms_of_Saint_Petersburg_%282003%29.svg.png", "kazan": "a/a4/Coat_of_Arms_of_Kazan_%28Tatarstan%29.svg/120px-Coat_of_Arms_of_Kazan_%28Tatarstan%29.svg.png", "sochi": "1/19/Coat_of_Arms_of_Sochi_%28Krasnodar_krai%29.svg/120px-Coat_of_Arms_of_Sochi_%28Krasnodar_krai%29.svg.png", "nnov": "6/63/Coat_of_Arms_of_Nizhny_Novgorod.svg/120px-Coat_of_Arms_of_Nizhny_Novgorod.svg.png", "ekb": "9/9c/Coat_of_Arms_of_Yekaterinburg_%28Sverdlovsk_oblast%29.svg/120px-Coat_of_Arms_of_Yekaterinburg_%28Sverdlovsk_oblast%29.svg.png"};
+DATA.cities.forEach((c,i)=>{const b=document.createElement('button');if(ARMS[c[0]]){const im=document.createElement('img');im.className='arm';im.alt='';im.loading='lazy';im.src='https://upload.wikimedia.org/wikipedia/commons/thumb/'+ARMS[c[0]];b.appendChild(im)}b.appendChild(document.createTextNode(c[1]));b.onclick=()=>{city=i;go(true)};cb.appendChild(b)});
 const pls=document.getElementById('pls');
 PL.forEach((n,i)=>{const l=document.createElement('label');l.innerHTML=`<input type="checkbox" checked> <span class="c${i}">${n}</span><span class="cnt" id="pc${i}"></span>`;l.querySelector('input').onchange=e=>{on[i]=e.target.checked?1:0;go()};pls.appendChild(l)});
 document.querySelectorAll('input[name=kind]').forEach(r=>r.onchange=()=>{kind=r.value;go()});
@@ -881,7 +885,7 @@ const ov=L.layerGroup();
 function hrs(h){if(h>=24){const d=Math.floor(h/24),H=Math.round(h-d*24);return d+' д'+(H?' '+H+' ч':'')}const H=Math.floor(h),m=Math.round((h-H)*60);return H+' ч'+(m?' '+m+' мин':'')}
 function overview(){dots.set([]);map.closePopup();ov.clearLayers();ov.addTo(map);const O=DATA.overview;
   setTimeout(()=>{map.invalidateSize();map.fitBounds(O.cities.map(c=>c.ctr),{padding:[70,70]})},60);
-  O.trains.forEach(t=>{const a=O.cities.find(c=>c.key===t.a),b=O.cities.find(c=>c.key===t.b);const ln=L.polyline([a.ctr,b.ctr],{color:'#16161a',weight:t.fast?3:1.5,opacity:t.fast?.75:.35,dashArray:t.fast?null:'4 5'});
+  O.trains.forEach(t=>{const a=O.cities.find(c=>c.key===t.a),b=O.cities.find(c=>c.key===t.b);const ln=L.polyline([a.ctr,b.ctr],{color:css('--ink'),weight:t.fast?3:1.5,opacity:t.fast?.75:.35,dashArray:t.fast?null:'4 5'});
     const txt=`<b>${a.name} — ${b.name}</b><br>Быстрее всего: ${t.ft}, ${hrs(t.fh)}, ${fmt(t.fp)} ₽<br>Дешевле всего: ${t.ct}, ${hrs(t.ch)}, ${fmt(t.cp)} ₽${t.flight?`<br>Самолёт: ${hrs(t.ftime)}, от ${fmt(t.flight)} ₽`:''}`;ln.bindTooltip(txt,{sticky:true});ln.bindPopup(txt);ov.addLayer(ln)});
   const mxn=Math.max(...O.cities.map(c=>c.n));
   O.cities.forEach((c,i)=>{const m=L.circleMarker(c.ctr,{radius:10+30*Math.sqrt(c.n/mxn),color:'#fff',weight:2,fillColor:css('--p1'),fillOpacity:.75});
@@ -889,7 +893,7 @@ function overview(){dots.set([]);map.closePopup();ov.clearLayers();ov.addTo(map)
     m.bindTooltip(`<b>${c.name}</b><br>${fmt(c.n)} объявлений, медиана ${fmt(c.med)} ₽`,{direction:'top'});
     m.bindPopup(`<div class="pp"><h4>${c.name}</h4><div class="more">Медиана ${fmt(c.med)} ₽ за ночь, свободно на 6–8 ноября ${Math.round(c.free*100)}% объектов с датами</div><div class="row">Объявления по площадкам</div>${rows}${c.ops&&c.ops.length?`<div class="row">Крупнейшие операторы</div>`+c.ops.map(o=>`<div class="it"><span>${esc(o[0])}</span><b>${fmt(o[1])}</b></div>`).join(''):''}<div style="margin-top:8px"><a href="#" onclick="city=${i};go(true);return false">Открыть карту города</a></div></div>`,{maxWidth:360});
     m.on('dblclick',()=>{city=i;go(true)});ov.addLayer(m);
-    ov.addLayer(L.marker(c.ctr,{icon:L.divIcon({className:'',html:`<div style="transform:translate(-50%,24px);font:800 13px Manrope,sans-serif;color:#16161a;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff">${c.name}</div>`})}))});
+    ov.addLayer(L.marker(c.ctr,{icon:L.divIcon({className:'',html:`<div style="transform:translate(-50%,24px);font:800 13px Manrope,sans-serif;color:var(--ink);white-space:nowrap;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 6px var(--bg)">${c.name}</div>`})}))});
   document.getElementById('kN').textContent=fmt(O.cities.reduce((t,c)=>t+c.n,0));document.getElementById('kNc').textContent='объявлений в шести городах';
   document.getElementById('kM').textContent=fmt(O.med);document.getElementById('legend').style.display='none';
   document.getElementById('tbl').innerHTML=`<tr><th></th><th>Объявлений</th><th>Медиана, ₽</th><th>Свободно 6–8 нояб.</th></tr>`+O.cities.map(c=>`<tr><td>${c.name}</td><td>${fmt(c.n)}</td><td>${fmt(c.med)}</td><td>${Math.round(c.free*100)}%</td></tr>`).join('');
