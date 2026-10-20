@@ -674,7 +674,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .wrap{display:grid;grid-template-columns:470px 1fr;height:100vh}
 aside{overflow-y:auto;padding:26px 26px 48px;border-right:1px solid var(--line)}
 .right{display:grid;grid-template-rows:1fr auto;min-height:0;height:100vh}
-#mapbox{position:relative;min-height:0}#map{height:100%;width:100%}
+#mapbox{position:relative;min-height:0}#map{height:100%;width:100%;background:#f2efe9}
 #charts{border-top:1px solid var(--line);padding:16px 22px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:26px;max-height:46vh;overflow:auto}
 #charts h3{margin:0 0 4px;font-size:15px;font-weight:800}
 h1{font-size:28px;line-height:1.05;letter-spacing:-.02em;margin:0 0 10px;font-weight:800}
@@ -718,12 +718,47 @@ svg text{font-family:Manrope,sans-serif}
 @media (max-width:980px){#charts{grid-template-columns:1fr;max-height:none}}
 @media (max-width:860px){.wrap{grid-template-columns:1fr;height:auto}.right{height:auto;grid-template-rows:62vh auto;order:1}aside{order:2;border-right:0;padding:20px 16px 32px}h1{font-size:24px}#charts{padding:14px 16px}}
 #trains b,#trains .cnt{white-space:nowrap}
-.dl{display:inline-block;margin:14px 0 4px;padding:11px 18px;border-radius:12px;background:#FFDD2D;color:#16161a;font-weight:800;font-size:14px;text-decoration:none}.dl:hover{background:#ffd20f}
+/* mobile */
+@media (max-width:640px){
+html,body{overflow-x:hidden;max-width:100%;height:auto;min-height:100%}
+.wrap{display:flex;flex-direction:column;height:auto;width:100%;max-width:100vw}
+.right{display:block;height:auto;order:1}
+#mapbox{height:60vh;min-height:55vh;width:100%}
+#map{height:100%}
+aside{order:2;overflow:visible;padding:18px 16px 40px;max-width:100vw}
+h1{font-size:22px;line-height:1.1}
+.sub,.cap,.note,.src,.rangeval,.cnt{font-size:14px}
+.label{font-size:15px;margin:20px 0 8px}
+.tabs{flex-wrap:nowrap;overflow-x:auto;gap:0 16px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding-left:16px;padding-right:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{font-size:17px;white-space:nowrap;flex:0 0 auto;min-height:44px;display:inline-flex;align-items:center}
+.opts{gap:4px 14px;font-size:14px}
+.opts label{min-height:44px;padding:0}
+.opts input{width:20px;height:20px;margin:0}
+.same{min-height:44px;font-size:15px}
+.same input{width:22px;height:22px}
+input[type=range]{height:44px;margin:0}
+.dl{display:block;text-align:center;padding:13px 16px;font-size:15px;min-height:44px}
+.kpis{gap:14px}.big{font-size:30px}
+.tscroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
+.tscroll table{width:max-content;min-width:100%;font-size:13px}
+.tscroll th,.tscroll td{white-space:nowrap;padding-right:10px}
+.tscroll th:first-child,.tscroll td:first-child{white-space:normal;min-width:96px;max-width:150px}
+#charts{display:block;padding:14px 16px 18px;max-height:none;overflow:visible}
+#charts>div{margin-bottom:22px}#charts svg{max-width:100%!important}
+.legend{right:10px;bottom:10px;padding:8px 10px}.legend .bar{width:140px}
+.leaflet-popup-content{min-width:0;max-width:calc(100vw - 60px);max-height:60vh;font-size:14px}
+.leaflet-popup{max-width:calc(100vw - 20px)}
+.leaflet-control-zoom a{width:44px!important;height:44px!important;line-height:44px!important;font-size:22px!important}
+.leaflet-control-attribution{font-size:10px;max-width:70vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+.dl{display:inline-block;margin:14px 0 4px;padding:11px 18px;border-radius:12px;background:#FFDD2D;color:#16161a;font-weight:800;font-size:14px;text-decoration:none}.dl:hover{background:#ffd20f}.dl2{background:#f1f1f4;margin-top:8px}.dl2:hover{background:#e6e6ea}
 </style></head><body>
 <div class="wrap"><aside>
 <h1>Квартиры и апартаменты посуточно: цены на площадках</h1>
 <p class="sub">Все объявления шести площадок в шести городах. Нажмите на точку, чтобы увидеть цены в этом доме.</p>
 <a class="dl" href="https://drive.google.com/file/d/1W-fGhI8vfgZG-hIf8CxBbCoCTJEzbdJ2/view?usp=sharing" target="_blank" rel="noopener">Скачать исследование рынка (PDF)</a>
+<a class="dl dl2" href="https://drive.google.com/file/d/1A99tAgM5eRU7x5ygOKuJZbyZsXP30T6_/view?usp=sharing" target="_blank" rel="noopener">Источники исследования (PDF)</a>
 <div class="label">Город</div><div class="tabs" id="cities"></div>
 <label class="same"><input type="checkbox" id="onlySame"> Только одинаковые объекты</label>
 <div class="cap" id="sameCap"></div>
@@ -772,21 +807,13 @@ let city=0,kind='all',pmode='any',colorMode='pl',maxp=30000,on=[1,1,1,1,1,1],sam
 let P=[],G=[],cache={};
 const map=L.map('map',{preferCanvas:true,zoomControl:true});
 map.attributionControl.remove();
-const TB={};const TBL={};const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-const IMC={};const getIm=k=>{let im=IMC[k];if(!im){im=new Image();im.src='data:image/jpeg;base64,'+TB[k];IMC[k]=im}return im};
-const Local=L.GridLayer.extend({createTile(c,done){const cv=document.createElement('canvas');cv.width=cv.height=256;const g=cv.getContext('2d');
- let z=c.z,x=c.x,y=c.y,k;while(z>=3&&!TB[k=z+'/'+x+'/'+y]){z--;x=Math.floor(x/2);y=Math.floor(y/2)}
- if(z<3){setTimeout(()=>done(null,cv),0);return cv}
- const d=c.z-z,n=1<<d,sz=256/n,ox=(c.x-(x<<d))*sz,oy=(c.y-(y<<d))*sz;const im=getIm(k);
- const draw=()=>{g.imageSmoothingQuality='high';g.drawImage(im,ox,oy,sz,sz,0,0,256,256)};
- if(im.complete&&im.naturalWidth){draw();setTimeout(()=>done(null,cv),0)}else{im.addEventListener('load',()=>{draw();done(null,cv)},{once:true});im.addEventListener('error',()=>done(null,cv),{once:true})}
- return cv}});
-const base=new Local({maxZoom:18,keepBuffer:6,updateWhenZooming:false}).addTo(map);window._useLocal=1;
-function loadTiles(name){if(!window._useLocal)return;if(window.TILES_EMBED&&TILES_EMBED[name]){Object.assign(TB,TILES_EMBED[name]);base.redraw();return}if(TBL[name])return TBL[name];TBL[name]=fetch('tiles/'+name+'.json').then(r=>r.ok?r.json():fetch(name+'.json').then(q=>q.ok?q.json():{})).then(j=>{Object.assign(TB,j);base.redraw()}).catch(()=>{});return TBL[name]}
-loadTiles('overview');
+const base=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,detectRetina:false,keepBuffer:2,updateWhenIdle:true,updateWhenZooming:false,crossOrigin:true}).addTo(map);
+L.control.attribution({prefix:false,position:'bottomright'}).addAttribution('© OpenStreetMap, © CARTO').addTo(map);
+function loadTiles(){}
 const ramp=['#2c7bb6','#00a6ca','#00ccbc','#90eb9d','#f9d057','#f29e2e','#e76818','#d7191c'];
 const priceColor=p=>ramp[Math.min(7,Math.floor(Math.min(1,Math.max(0,(p-2000)/16000))*8))];
 const gapColor=g=>ramp[Math.min(7,Math.floor(Math.min(1,g/0.4)*8))];
+document.querySelectorAll('aside table').forEach(t=>{const w=document.createElement('div');w.className='tscroll';t.parentNode.insertBefore(w,t);w.appendChild(t)});
 document.getElementById('lgbar').style.background=`linear-gradient(90deg,${ramp.join(',')})`;
 // ---------- fast canvas point layer ----------
 const Dots=L.Layer.extend({
@@ -797,8 +824,12 @@ const Dots=L.Layer.extend({
     c.width=s.x*dpr;c.height=s.y*dpr;c.style.width=s.x+'px';c.style.height=s.y+'px';L.DomUtil.setPosition(c,tl);
     const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);const z=m.getZoom();const r=same?(z>=14?6:z>=12?4.5:3.2):(z>=15?5:z>=13?3.6:z>=11?2.6:1.9);
     const b=m.getBounds().pad(0.05),S=[],n=this.items.length;this.sx=new Float32Array(n);this.sy=new Float32Array(n);this.vis=new Uint8Array(n);
+    const byCol=new Map();
     for(let i=0;i<n;i++){const it=this.items[i];if(!b.contains([it.lat,it.lon]))continue;const pt=m.latLngToContainerPoint([it.lat,it.lon]);this.sx[i]=pt.x;this.sy[i]=pt.y;this.vis[i]=1;
-      x.beginPath();x.arc(pt.x,pt.y,r,0,6.2832);x.fillStyle=it.col;x.globalAlpha=.85;x.fill();if(r>3){x.globalAlpha=.9;x.lineWidth=.8;x.strokeStyle='#fff';x.stroke()}}},
+      let a=byCol.get(it.col);if(!a){a=[];byCol.set(it.col,a)}a.push(pt.x,pt.y)}
+    x.lineWidth=.8;x.strokeStyle='#fff';
+    byCol.forEach((a,col)=>{x.beginPath();for(let j=0;j<a.length;j+=2){x.moveTo(a[j]+r,a[j+1]);x.arc(a[j],a[j+1],r,0,6.2832)}
+      x.globalAlpha=.85;x.fillStyle=col;x.fill();if(r>3){x.globalAlpha=.9;x.stroke()}});x.globalAlpha=1},
   hit(cp){if(!this.items)return -1;let best=-1,bd=81;for(let i=0;i<this.items.length;i++){if(!this.vis[i])continue;const dx=this.sx[i]-cp.x,dy=this.sy[i]-cp.y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=i}}return best}
 });
 const dots=new Dots().addTo(map);
