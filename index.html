@@ -817,11 +817,9 @@ const Tinted=L.GridLayer.extend({
   const z=Math.min(c.z,16),k=c.z-z,n=1<<k,sx=c.x>>k,sy=c.y>>k,sz=256/n,ox=(c.x-(sx<<k))*sz,oy=(c.y-(sy<<k))*sz;
   const im=new Image();im.crossOrigin='anonymous';const th=this.options.theme;
   im.onload=()=>{g.drawImage(im,ox,oy,sz,sz,0,0,256,256);
-   try{const d=g.getImageData(0,0,256,256),p=d.data,h=new Uint32Array(256);
-    for(let i=0;i<p.length;i+=4)h[(p[i]*3+p[i+1]*5+p[i+2]*2)/10|0]++;
-    let land=0;for(let v=1;v<256;v++)if(h[v]>h[land])land=v;
-    const [R,G,B,A]=ROAD[th],span=th==='Dark'?22:Math.max(10,255-land);
-    for(let i=0;i<p.length;i+=4){const L=(p[i]*3+p[i+1]*5+p[i+2]*2)/10;const t=(L-land-3)/span;if(t<=0)continue;const a=Math.min(1,t)*A;
+   try{const d=g.getImageData(0,0,256,256),p=d.data;
+    const [R,G,B,A]=ROAD[th],land=th==='Dark'?86:240,span=th==='Dark'?22:13;
+    for(let i=0;i<p.length;i+=4){const L=(p[i]*3+p[i+1]*5+p[i+2]*2)/10;const t=(L-land)/span;if(t<=0)continue;const a=Math.min(1,t)*A;
      p[i]+= (R-p[i])*a;p[i+1]+=(G-p[i+1])*a;p[i+2]+=(B-p[i+2])*a}
     g.putImageData(d,0,0)}catch(e){}
    done(null,cv)};
