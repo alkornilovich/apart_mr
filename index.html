@@ -1,4 +1,6 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.cov{display:flex;gap:14px;align-items:center;margin:16px 0 2px;padding:10px;border-radius:14px;background:#f6f6f8;color:#16161a;text-decoration:none}.cov:hover{background:#efeff2}.cov img{width:92px;height:auto;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.14);flex:0 0 auto}.cov span{font-size:13px;line-height:1.35;color:#55555c}.cov b{display:block;font-size:15px;color:#16161a;margin-bottom:3px}.cov{margin:10px 0 0}.cbtn{display:table;margin-top:9px;padding:7px 14px;border-radius:10px;background:#FFDD2D;color:#16161a;font-style:normal;font-weight:800;font-size:13px}.cov:hover .cbtn{background:#ffd20f}.cbtn2{background:#e6e6ea}.cov:hover .cbtn2{background:#dcdce1}
+.allmap{display:block;width:100%;text-align:left;margin:12px 0 4px;padding:11px 14px;border:0;border-radius:12px;background:#16161a;color:#fff;font:800 14px inherit;font-family:inherit;cursor:pointer}.allmap span{display:block;font-weight:500;font-size:12px;opacity:.7;margin-top:2px}.allmap:hover{background:#2a2a30}.allmap.on{background:#FFDD2D;color:#16161a}.rt{transform:translate(-50%,-50%);display:inline-block;white-space:nowrap;background:#fff;color:#16161a;border-radius:9px;padding:1px 6px;font:700 10px sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.lead6{font-size:17px;line-height:1.35;font-weight:700;color:var(--ink);margin:4px 0 10px}.hint{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#FFF4BF;color:#16161a;font-size:15px;line-height:1.35;font-weight:600;margin:0 0 6px}.hint svg{flex:0 0 auto;background:#fff;border-radius:50%;padding:5px;box-sizing:content-box}aside h1{font-size:32px}
 </style></head><body>
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -757,9 +759,9 @@ input[type=range]{height:44px;margin:0}
 </style></head><body>
 <div class="wrap"><aside>
 <h1>Квартиры и апартаменты посуточно: цены на площадках</h1>
-<p class="sub">Все объявления шести площадок в шести городах. Нажмите на точку, чтобы увидеть цены в этом доме.</p>
+<p class="lead6">Все объявления шести площадок в шести городах</p><div class="hint"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="6" fill="none" stroke="#16161a" stroke-width="1.8"/><line x1="12" y1="2.5" x2="12" y2="9.5" stroke="#16161a" stroke-width="1.8"/><rect x="6.9" y="3.4" width="5.1" height="6.1" rx="2.5" fill="#FFDD2D"/></svg><span>Нажмите на точку на карте, чтобы увидеть цены в этом доме на всех площадках</span></div>
 <a class="cov" href="research.pdf" download="Посуточная аренда квартир и апартаментов — исследование рынка.pdf"><img src="cover.jpg" alt="Обложка исследования рынка"><span><b>Исследование рынка</b>Посуточная аренда квартир и апартаментов в России, октябрь 2026, 37 страниц<em class="cbtn">Скачать PDF</em></span></a>
-<a class="cov" href="sources.pdf" download="Источники исследования.pdf"><img src="sources_cover.jpg" alt="Обложка списка источников"><span><b>Источники исследования</b>Даты, ссылки и что взято из каждого, 8 страниц<em class="cbtn cbtn2">Скачать PDF</em></span></a>
+<a class="cov" href="sources.pdf" download="Источники презентации.pdf"><img src="sources_cover.jpg" alt="Обложка списка источников презентации"><span><b>Источники презентации</b>Даты, ссылки и что взято из каждого, 8 страниц<em class="cbtn cbtn2">Скачать PDF</em></span></a>
 <div class="label">Город</div><div class="tabs" id="cities"></div>
 <label class="same"><input type="checkbox" id="onlySame"> Только одинаковые объекты</label>
 <div class="cap" id="sameCap"></div>
@@ -867,6 +869,7 @@ const nm=p=>{if(p[8])return esc(p[8]);const a=[p[6]>=0?(p[6]===0?'Студия':
 const cb=document.getElementById('cities');
 const ARMS={"moscow": "1/17/Coat_of_arms_of_Moscow.svg/120px-Coat_of_arms_of_Moscow.svg.png", "spb": "c/cd/Coat_of_arms_of_Saint_Petersburg_%282003%29.svg/120px-Coat_of_arms_of_Saint_Petersburg_%282003%29.svg.png", "kazan": "a/a4/Coat_of_Arms_of_Kazan_%28Tatarstan%29.svg/120px-Coat_of_Arms_of_Kazan_%28Tatarstan%29.svg.png", "sochi": "1/19/Coat_of_Arms_of_Sochi_%28Krasnodar_krai%29.svg/120px-Coat_of_Arms_of_Sochi_%28Krasnodar_krai%29.svg.png", "nnov": "6/63/Coat_of_Arms_of_Nizhny_Novgorod.svg/120px-Coat_of_Arms_of_Nizhny_Novgorod.svg.png", "ekb": "9/9c/Coat_of_Arms_of_Yekaterinburg_%28Sverdlovsk_oblast%29.svg/120px-Coat_of_Arms_of_Yekaterinburg_%28Sverdlovsk_oblast%29.svg.png"};
 DATA.cities.forEach((c,i)=>{const b=document.createElement('button');if(ARMS[c[0]]){const im=document.createElement('img');im.className='arm';im.alt='';im.loading='lazy';im.src='https://upload.wikimedia.org/wikipedia/commons/thumb/'+ARMS[c[0]];b.appendChild(im)}b.appendChild(document.createTextNode(c[1]));b.onclick=()=>{city=i;go(true)};cb.appendChild(b)});
+const AB=document.createElement('button');AB.className='allmap';AB.innerHTML='Посмотреть всю карту<span>все города и как между ними добраться</span>';AB.onclick=()=>{city=-1;go(true)};cb.parentNode.insertBefore(AB,cb.nextSibling);
 const pls=document.getElementById('pls');
 PL.forEach((n,i)=>{const l=document.createElement('label');l.innerHTML=`<input type="checkbox" checked> <span class="c${i}">${n}</span><span class="cnt" id="pc${i}"></span>`;l.querySelector('input').onchange=e=>{on[i]=e.target.checked?1:0;go()};pls.appendChild(l)});
 document.querySelectorAll('input[name=kind]').forEach(r=>r.onchange=()=>{kind=r.value;go()});
@@ -903,9 +906,10 @@ function hrs(h){if(h>=24){const d=Math.floor(h/24),H=Math.round(h-d*24);return d
 function overview(){dots.set([]);map.closePopup();ov.clearLayers();ov.addTo(map);const O=DATA.overview;
   setTimeout(()=>{map.invalidateSize();map.fitBounds(O.cities.map(c=>c.ctr),{padding:[70,70]})},60);
   O.trains.forEach(t=>{const a=O.cities.find(c=>c.key===t.a),b=O.cities.find(c=>c.key===t.b);const ln=L.polyline([a.ctr,b.ctr],{color:css('--ink'),weight:t.fast?3:1.5,opacity:t.fast?.75:.35,dashArray:t.fast?null:'4 5'});
-    const txt=`<b>${a.name} — ${b.name}</b><br>Быстрее всего: ${t.ft}, ${hrs(t.fh)}, ${fmt(t.fp)} ₽<br>Дешевле всего: ${t.ct}, ${hrs(t.ch)}, ${fmt(t.cp)} ₽${t.flight?`<br>Самолёт: ${hrs(t.ftime)}, от ${fmt(t.flight)} ₽`:''}`;ln.bindTooltip(txt,{sticky:true});ln.bindPopup(txt);ov.addLayer(ln)});
+    const txt=`<b>${a.name} — ${b.name}</b><br>Быстрее всего: ${t.ft}, ${hrs(t.fh)}, ${fmt(t.fp)} ₽<br>Дешевле всего: ${t.ct}, ${hrs(t.ch)}, ${fmt(t.cp)} ₽${t.flight?`<br>Самолёт: ${hrs(t.ftime)}, от ${fmt(t.flight)} ₽`:''}`;ln.bindTooltip(txt,{sticky:true});ln.bindPopup(txt);ov.addLayer(ln);
+    if(t.fast&&t.fh<6){const mid=[(a.ctr[0]+b.ctr[0])/2,(a.ctr[1]+b.ctr[1])/2];ov.addLayer(L.marker(mid,{interactive:false,icon:L.divIcon({className:'',html:`<div class="rt">поезд ${hrs(t.fh)}</div>`})}))}});
   const mxn=Math.max(...O.cities.map(c=>c.n));
-  O.cities.forEach((c,i)=>{const m=L.circleMarker(c.ctr,{radius:10+30*Math.sqrt(c.n/mxn),color:'#fff',weight:2,fillColor:css('--p1'),fillOpacity:.75});
+  O.cities.forEach((c,i)=>{const m=L.circleMarker(c.ctr,{radius:6+16*Math.sqrt(c.n/mxn),color:'#fff',weight:2,fillColor:css('--p1'),fillOpacity:.75});
     const rows=c.by.map((n,k)=>n?`<div class="it"><span class="c${k}">${PL[k]}</span><b>${fmt(n)}</b></div>`:'').join('');
     m.bindTooltip(`<b>${c.name}</b><br>${fmt(c.n)} объявлений, медиана ${fmt(c.med)} ₽`,{direction:'top'});
     m.bindPopup(`<div class="pp"><h4>${c.name}</h4><div class="more">Медиана ${fmt(c.med)} ₽ за ночь, свободно на 6–8 ноября ${Math.round(c.free*100)}% объектов с датами</div><div class="row">Объявления по площадкам</div>${rows}${c.ops&&c.ops.length?`<div class="row">Крупнейшие операторы</div>`+c.ops.map(o=>`<div class="it"><span>${esc(o[0])}</span><b>${fmt(o[1])}</b></div>`).join(''):''}<div style="margin-top:8px"><a href="#" onclick="city=${i};go(true);return false">Открыть карту города</a></div></div>`,{maxWidth:360});
@@ -918,10 +922,10 @@ function overview(){dots.set([]);map.closePopup();ov.clearLayers();ov.addTo(map)
   const W=580,lh=30,H=O.cities.length*lh+10,mx2=Math.max(...O.cities.map(c=>c.med))*1.15;let sv=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W+80}px">`;
   [...O.cities].sort((a,b)=>b.med-a.med).forEach((c,k)=>{const y=k*lh+5,w=(W-200)*c.med/mx2;sv+=`<text x="0" y="${y+15}" font-size="12" font-weight="700" fill="${css('--ink')}">${c.name}</text><rect x="140" y="${y+3}" width="${w}" height="16" fill="${k?css('--muted'):css('--p1')}" fill-opacity="${k?.45:.9}"/><text x="${145+w}" y="${y+15}" font-size="11.5" font-weight="700" fill="${css('--ink')}">${fmt(c.med)} ₽</text>`});
   document.getElementById('ch1').innerHTML=sv+'</svg><div class="cap">Медиана цены за ночь по всем площадкам.</div>';
-  document.getElementById('ch2c').textContent='';document.getElementById('ch2').innerHTML=`<div class="cap" style="margin-top:0">Линии на карте: поезда между городами. Сплошная линия: поездка до 12 часов. Наведите или нажмите на линию, чтобы увидеть время и цену билета.</div>`;
+  document.getElementById('ch2c').textContent='';document.getElementById('ch2').innerHTML=`<div class="cap" style="margin-top:0">Линии на карте: поезда между городами. Сплошная линия: поездка до 12 часов. Наведите или нажмите на линию, чтобы увидеть время и цену билета. Приблизьте карту к городу — появятся его объявления.</div>`;
   document.querySelector('#charts h3+div').previousElementSibling.textContent='Цена за ночь по городам';document.querySelectorAll('#charts h3')[1].textContent='Как добраться';}
 async function go(recenter){
-  [...cb.children].forEach((b,i)=>b.classList.toggle('on',i===city));
+  [...cb.children].forEach((b,i)=>b.classList.toggle('on',i===city));AB.classList.toggle('on',city<0);
   if(city<0){overview();return}
   map.removeLayer(ov);document.getElementById('tblLabel').textContent='Площадки в городе';document.querySelectorAll('#charts h3')[0].textContent='Распределение цен за ночь';document.querySelectorAll('#charts h3')[1].textContent='Один объект: где дороже';
   document.getElementById('maxpv').textContent=maxp>=30000?'без ограничения':fmt(maxp)+' ₽';
@@ -980,6 +984,9 @@ function charts(sel){
 document.getElementById('notes').innerHTML=DATA.meta.notes.map(n=>`<p>${n}</p>`).join('');
 document.getElementById('sources').innerHTML=DATA.meta.sources.map(s=>`<div class="src"><div class="t">${s[0]}</div><div class="d">${s[1]}</div><div class="links">${s[2].map(l=>`<a href="${l[1]}" target="_blank">${l[0]}</a>`).join('')}</div></div>`).join('');
 city=0;go(true);
+map.on('zoomend',()=>{const z=map.getZoom();
+  if(city<0&&z>=8){const c=map.getCenter();let best=0,bd=1e9;DATA.cities.forEach((x,i)=>{const d=(x[2][0]-c.lat)**2+((x[2][1]-c.lng)*Math.cos(c.lat*Math.PI/180))**2;if(d<bd){bd=d;best=i}});city=best;go(false)}
+  else if(city>=0&&z<=5){city=-1;go(true)}});
 {const O=DATA.overview,nm=k=>O.cities.find(c=>c.key===k).name,tn=s=>esc(s.replace(/^\d{3}\S*\s*/,'')||s),cell=(n,h,p)=>`${tn(n)}<br><span class="cnt">${hrs(h)}</span><br><b>${fmt(p)} ₽</b>`;document.getElementById('trains').innerHTML=`<tr><th>Маршрут</th><th>Быстрее всего</th><th>Дешевле всего</th><th>Самолёт</th></tr>`+O.trains.map(t=>`<tr><td>${nm(t.a)} — ${nm(t.b)}</td><td>${cell(t.ft,t.fh,t.fp)}</td><td>${t.ct===t.ft?'тот же поезд':cell(t.ct,t.ch,t.cp)}</td><td>${t.ap?`<span class="cnt">${hrs(t.ah)}</span><br><b>от ${fmt(t.ap)} ₽</b>`:'нет прямых'}</td></tr>`).join('')}
 </script></body></html>
 
