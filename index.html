@@ -809,8 +809,26 @@ const map=L.map('map',{preferCanvas:true,zoomControl:true});
 map.attributionControl.remove();
 const ESRI=t=>`https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${t}_Gray_Base/MapServer/tile/{z}/{y}/{x}`;
 const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;const isDark=()=>!!(mq&&mq.matches);
-const base=L.tileLayer(ESRI(isDark()?'Dark':'Light'),{maxNativeZoom:16,maxZoom:19,keepBuffer:2,updateWhenIdle:true,updateWhenZooming:false,crossOrigin:true}).addTo(map);
-if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{base.setUrl(ESRI(isDark()?'Dark':'Light'));document.getElementById('map').style.background=isDark()?'#242424':'#f2efe9'});
+const ROAD={Light:[246,196,64,.85],Dark:[214,170,80,.75]};
+const Tinted=L.GridLayer.extend({
+ options:{theme:'Light'},
+ setTheme(t){this.options.theme=t;this.redraw()},
+ createTile(c,done){const cv=document.createElement('canvas');cv.width=cv.height=256;const g=cv.getContext('2d',{willReadFrequently:true});
+  const z=Math.min(c.z,16),k=c.z-z,n=1<<k,sx=c.x>>k,sy=c.y>>k,sz=256/n,ox=(c.x-(sx<<k))*sz,oy=(c.y-(sy<<k))*sz;
+  const im=new Image();im.crossOrigin='anonymous';const th=this.options.theme;
+  im.onload=()=>{g.drawImage(im,ox,oy,sz,sz,0,0,256,256);
+   try{const d=g.getImageData(0,0,256,256),p=d.data,h=new Uint32Array(256);
+    for(let i=0;i<p.length;i+=4)h[(p[i]*3+p[i+1]*5+p[i+2]*2)/10|0]++;
+    let land=0;for(let v=1;v<256;v++)if(h[v]>h[land])land=v;
+    const [R,G,B,A]=ROAD[th],span=th==='Dark'?60:Math.max(10,255-land);
+    for(let i=0;i<p.length;i+=4){const L=(p[i]*3+p[i+1]*5+p[i+2]*2)/10;const t=(L-land-3)/span;if(t<=0)continue;const a=Math.min(1,t)*A;
+     p[i]+= (R-p[i])*a;p[i+1]+=(G-p[i+1])*a;p[i+2]+=(B-p[i+2])*a}
+    g.putImageData(d,0,0)}catch(e){}
+   done(null,cv)};
+  im.onerror=()=>done(null,cv);
+  im.src=ESRI(th).replace('{z}',z).replace('{y}',sy).replace('{x}',sx);return cv}});
+const base=new Tinted({theme:isDark()?'Dark':'Light',maxZoom:19,keepBuffer:2,updateWhenIdle:true,updateWhenZooming:false}).addTo(map);
+if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{base.setTheme(isDark()?'Dark':'Light');document.getElementById('map').style.background=isDark()?'#242424':'#f2efe9'});
 L.control.attribution({prefix:false,position:'bottomright'}).addAttribution('© Esri, HERE, OpenStreetMap').addTo(map);
 function loadTiles(){}
 const ramp=['#2c7bb6','#00a6ca','#00ccbc','#90eb9d','#f9d057','#f29e2e','#e76818','#d7191c'];
