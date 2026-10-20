@@ -818,7 +818,7 @@ const Tinted=L.GridLayer.extend({
   const im=new Image();im.crossOrigin='anonymous';const th=this.options.theme;
   im.onload=()=>{g.drawImage(im,ox,oy,sz,sz,0,0,256,256);
    try{const d=g.getImageData(0,0,256,256),p=d.data;
-    const [R,G,B,A]=ROAD[th],land=th==='Dark'?86:240,span=th==='Dark'?22:13;
+    const [R,G,B,A]=ROAD[th],land=th==='Dark'?81:240,span=th==='Dark'?14:13;
     for(let i=0;i<p.length;i+=4){const L=(p[i]*3+p[i+1]*5+p[i+2]*2)/10;const t=(L-land)/span;if(t<=0)continue;const a=Math.min(1,t)*A;
      p[i]+= (R-p[i])*a;p[i+1]+=(G-p[i+1])*a;p[i+2]+=(B-p[i+2])*a}
     g.putImageData(d,0,0)}catch(e){}
