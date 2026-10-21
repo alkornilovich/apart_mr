@@ -819,9 +819,9 @@ map.attributionControl.remove();
 const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;const isDark=()=>!!(mq&&mq.matches);
 const STY=d=>'https://tiles.openfreemap.org/styles/'+(d?'dark':'liberty');
 let base;
-function ruLabels(){const m=base.getMaplibreMap();const f=()=>{m.getStyle().layers.forEach(l=>{const tf=l.layout&&l.layout['text-field'];if(l.type==='symbol'&&tf&&JSON.stringify(tf).includes('name')){try{m.setLayoutProperty(l.id,'text-field',['coalesce',['get','name:ru'],['get','name']])}catch(e){}}})};if(m.isStyleLoaded())f();m.on('styledata',()=>{if(!m.__ru){m.__ru=1;setTimeout(()=>{f();m.__ru=0},50)}})}
+function ruLabels(){const m=base.getMaplibreMap&&base.getMaplibreMap();if(!m){setTimeout(ruLabels,250);return}const f=()=>{m.getStyle().layers.forEach(l=>{const tf=l.layout&&l.layout['text-field'];if(l.type==='symbol'&&tf&&JSON.stringify(tf).includes('name')){try{m.setLayoutProperty(l.id,'text-field',['coalesce',['get','name:ru'],['get','name']])}catch(e){}}})};if(m.isStyleLoaded())f();m.on('styledata',()=>{if(!m.__ru){m.__ru=1;setTimeout(()=>{f();m.__ru=0},50)}})}
 if(window.maplibregl&&L.maplibreGL){base=L.maplibreGL({style:STY(isDark())}).addTo(map);ruLabels();
-  if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{base.getMaplibreMap().setStyle(STY(isDark()));document.getElementById('map').style.background=isDark()?'#262626':'#f2efe9'})}
+  if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{const gm=base.getMaplibreMap&&base.getMaplibreMap();if(gm)gm.setStyle(STY(isDark()));document.getElementById('map').style.background=isDark()?'#262626':'#f2efe9'})}
 else{base=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map)}
 L.control.attribution({prefix:false,position:'bottomright'}).addAttribution('© <a href="https://openfreemap.org" target="_blank">OpenFreeMap</a>, © <a href="https://www.openmaptiles.org/" target="_blank">OpenMapTiles</a>, © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>').addTo(map);
 function loadTiles(){}
