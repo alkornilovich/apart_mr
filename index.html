@@ -898,7 +898,7 @@ function filt(){return P.filter(p=>on[p[0]]&&(kind==='all'||p[5])&&(maxp>=30000|
 const ov=L.layerGroup();
 function hrs(h){if(h>=24){const d=Math.floor(h/24),H=Math.round(h-d*24);return d+' д'+(H?' '+H+' ч':'')}const H=Math.floor(h),m=Math.round((h-H)*60);return H+' ч'+(m?' '+m+' мин':'')}
 function overview(){dots.set([]);map.closePopup();ov.clearLayers();ov.addTo(map);const O=DATA.overview;
-  setTimeout(()=>{map.invalidateSize();map.fitBounds(O.cities.map(c=>c.ctr),{paddingTopLeft:[40,60],paddingBottomRight:[150,40]})},60);
+  setTimeout(()=>{map.invalidateSize();const bb=L.latLngBounds(O.cities.map(c=>c.ctr));let z=map.getBoundsZoom(bb,false,L.point(190,100));if(!isFinite(z)||z>6)z=4.25;window.__fit=1;map.setView(bb.getCenter(),z,{animate:false});setTimeout(()=>{window.__fit=0},400)},60);
   const arc=(a,b,k)=>{const n=32,pts=[],dx=b[1]-a[1],dy=b[0]-a[0],mx=(a[0]+b[0])/2-dx*k,my=(a[1]+b[1])/2+dy*k;
     for(let i=0;i<=n;i++){const t=i/n,u=1-t;pts.push([u*u*a[0]+2*u*t*mx+t*t*b[0],u*u*a[1]+2*u*t*my+t*t*b[1]])}return pts};
   const tier=t=>t.fh<6?0:(t.fast?1:2);
@@ -988,7 +988,7 @@ function charts(sel){
 document.getElementById('notes').innerHTML=DATA.meta.notes.map(n=>`<p>${n}</p>`).join('');
 document.getElementById('sources').innerHTML=DATA.meta.sources.map(s=>`<div class="src"><div class="t">${s[0]}</div><div class="d">${s[1]}</div><div class="links">${s[2].map(l=>`<a href="${l[1]}" target="_blank">${l[0]}</a>`).join('')}</div></div>`).join('');
 city=0;go(true);
-map.on('zoomend',()=>{const z=map.getZoom();
+map.on('zoomend',()=>{if(window.__fit)return;const z=map.getZoom();
   if(city<0&&z>=8){const c=map.getCenter();let best=0,bd=1e9;DATA.cities.forEach((x,i)=>{const d=(x[2][0]-c.lat)**2+((x[2][1]-c.lng)*Math.cos(c.lat*Math.PI/180))**2;if(d<bd){bd=d;best=i}});city=best;go(false)}
   else if(city>=0&&z<=5){city=-1;go(true)}});
 {const O=DATA.overview,nm=k=>O.cities.find(c=>c.key===k).name,tn=s=>esc(s.replace(/^\d{3}\S*\s*/,'')||s),cell=(n,h,p)=>`${tn(n)}<br><span class="cnt">${hrs(h)}</span><br><b>${fmt(p)} ₽</b>`;document.getElementById('trains').innerHTML=`<tr><th>Маршрут</th><th>Быстрее всего</th><th>Дешевле всего</th><th>Самолёт</th></tr>`+O.trains.map(t=>`<tr><td>${nm(t.a)} — ${nm(t.b)}</td><td>${cell(t.ft,t.fh,t.fp)}</td><td>${t.ct===t.ft?'тот же поезд':cell(t.ct,t.ch,t.cp)}</td><td>${t.ap?`<span class="cnt">${hrs(t.ah)}</span><br><b>от ${fmt(t.ap)} ₽</b>`:'нет прямых'}</td></tr>`).join('')}
