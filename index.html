@@ -6,6 +6,7 @@
 .mlink{display:block;margin:10px 2px 2px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none}.mlink:hover{color:var(--ink);text-decoration:underline}
 .cov.cmini{justify-content:space-between;padding:12px 14px}.cov.cmini .cbtn{margin-top:0;flex:0 0 auto}.cov.cmini b{font-size:14px;margin:0}
 #map{background:#1c1c1e!important}
+@media (max-width:900px){.ovl{display:none}}
 </style></head><body>
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -898,7 +899,7 @@ function filt(){return P.filter(p=>on[p[0]]&&(kind==='all'||p[5])&&(maxp>=30000|
 const ov=L.layerGroup();
 function hrs(h){if(h>=24){const d=Math.floor(h/24),H=Math.round(h-d*24);return d+' д'+(H?' '+H+' ч':'')}const H=Math.floor(h),m=Math.round((h-H)*60);return H+' ч'+(m?' '+m+' мин':'')}
 function overview(){dots.set([]);map.closePopup();ov.clearLayers();ov.addTo(map);const O=DATA.overview;
-  setTimeout(()=>{map.invalidateSize();const bb=L.latLngBounds(O.cities.map(c=>c.ctr));let z=map.getBoundsZoom(bb,false,L.point(190,100));if(!isFinite(z)||z>6)z=4.25;window.__fit=1;map.setView(bb.getCenter(),z,{animate:false});setTimeout(()=>{window.__fit=0},400)},60);
+  setTimeout(()=>{map.invalidateSize();const bb=L.latLngBounds(O.cities.map(c=>c.ctr));const sz=map.getSize();let z=map.getBoundsZoom(bb,false,L.point(Math.min(190,sz.x*.2),Math.min(100,sz.y*.2)));if(!isFinite(z)||z>6)z=4.25;window.__fit=1;map.setView(bb.getCenter(),z,{animate:false});setTimeout(()=>{window.__fit=0},400)},60);
   const arc=(a,b,k)=>{const n=32,pts=[],dx=b[1]-a[1],dy=b[0]-a[0],mx=(a[0]+b[0])/2-dx*k,my=(a[1]+b[1])/2+dy*k;
     for(let i=0;i<=n;i++){const t=i/n,u=1-t;pts.push([u*u*a[0]+2*u*t*mx+t*t*b[0],u*u*a[1]+2*u*t*my+t*t*b[1]])}return pts};
   const tier=t=>t.fh<6?0:(t.fast?1:2);
