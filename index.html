@@ -5,6 +5,7 @@
 .cl{position:absolute;white-space:nowrap;background:var(--bg);border-radius:10px;padding:5px 9px;box-shadow:0 2px 10px rgba(0,0,0,.14);font-family:Manrope,sans-serif;color:var(--ink);line-height:1.2}.cl b{display:block;font-size:13.5px;font-weight:800}.cl span{display:block;font-size:11px;color:var(--muted);font-weight:600}.ovl{background:var(--bg);border-radius:14px;padding:10px 13px;box-shadow:0 2px 12px rgba(0,0,0,.14);font:600 12px Manrope,sans-serif;color:var(--ink);line-height:1.7}.ovl .ovt{font-weight:800;font-size:12.5px;margin-bottom:2px}.ovl i{display:inline-block;width:26px;height:0;vertical-align:middle;margin-right:8px;border-top:4px solid var(--ink)}.ovl i.l1{border-top-width:2px;opacity:.6}.ovl i.l2{border-top:2px dotted var(--muted)}.ovl .ovn{font-weight:500;font-size:11px;color:var(--muted);max-width:220px;line-height:1.35;margin-top:4px}
 .mlink{display:block;margin:10px 2px 2px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none}.mlink:hover{color:var(--ink);text-decoration:underline}
 .cov.cmini{justify-content:space-between;padding:12px 14px}.cov.cmini .cbtn{margin-top:0;flex:0 0 auto}.cov.cmini b{font-size:14px;margin:0}
+#map{background:#1c1c1e!important}
 </style></head><body>
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -817,11 +818,11 @@ let P=[],G=[],cache={};
 const map=L.map('map',{preferCanvas:true,zoomControl:true,zoomSnap:.25,zoomDelta:.5,wheelPxPerZoomLevel:90,maxZoom:20});
 map.attributionControl.remove();
 const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;const isDark=()=>!!(mq&&mq.matches);
-const STY=d=>'https://tiles.openfreemap.org/styles/'+(d?'dark':'liberty');
+const STY=()=>'https://tiles.openfreemap.org/styles/dark';
 let base;
-function ruLabels(){const m=base.getMaplibreMap&&base.getMaplibreMap();if(!m){setTimeout(ruLabels,250);return}const f=()=>{m.getStyle().layers.forEach(l=>{const tf=l.layout&&l.layout['text-field'];if(l.type==='symbol'&&tf&&JSON.stringify(tf).includes('name')){try{m.setLayoutProperty(l.id,'text-field',['coalesce',['get','name:ru'],['get','name']])}catch(e){}}if(isDark()&&l.type==='line'&&l['source-layer']==='transportation'&&!/rail|ferry|path|pier/.test(l.id)){try{m.setPaintProperty(l.id,'line-color',/motorway|trunk|primary/.test(l.id)?'#8a7136':'#4f4632')}catch(e){}}})};if(m.isStyleLoaded())f();m.on('styledata',()=>{if(!m.__ru){m.__ru=1;setTimeout(()=>{f();m.__ru=0},50)}})}
+function ruLabels(){const m=base.getMaplibreMap&&base.getMaplibreMap();if(!m){setTimeout(ruLabels,250);return}const f=()=>{m.getStyle().layers.forEach(l=>{const tf=l.layout&&l.layout['text-field'];if(l.type==='symbol'&&tf&&JSON.stringify(tf).includes('name')){try{m.setLayoutProperty(l.id,'text-field',['coalesce',['get','name:ru'],['get','name']])}catch(e){}}if(l.type==='line'&&l['source-layer']==='transportation'&&!/rail|ferry|path|pier/.test(l.id)){try{m.setPaintProperty(l.id,'line-color',/motorway|trunk|primary/.test(l.id)?'#8a7136':'#4f4632')}catch(e){}}})};if(m.isStyleLoaded())f();m.on('styledata',()=>{if(!m.__ru){m.__ru=1;setTimeout(()=>{f();m.__ru=0},50)}})}
 if(window.maplibregl&&L.maplibreGL){base=L.maplibreGL({style:STY(isDark())}).addTo(map);ruLabels();
-  if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{const gm=base.getMaplibreMap&&base.getMaplibreMap();if(gm)gm.setStyle(STY(isDark()));document.getElementById('map').style.background=isDark()?'#262626':'#f2efe9'})}
+  }
 else{base=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map)}
 L.control.attribution({prefix:false,position:'bottomright'}).addAttribution('© <a href="https://openfreemap.org" target="_blank">OpenFreeMap</a>, © <a href="https://www.openmaptiles.org/" target="_blank">OpenMapTiles</a>, © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>').addTo(map);
 function loadTiles(){}
