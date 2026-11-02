@@ -762,31 +762,51 @@ input[type=range]{height:44px;margin:0}
 .leaflet-control-attribution{font-size:10px;max-width:70vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
 .dl{display:inline-block;margin:14px 0 4px;padding:11px 18px;border-radius:12px;background:#FFDD2D;color:#16161a;font-weight:800;font-size:14px;text-decoration:none}.dl:hover{background:#ffd20f}.dl2{background:#f1f1f4;margin-top:8px}.dl2:hover{background:#e6e6ea}
+
+/* мобильная версия: сначала заголовок и выбор, потом карта */
+.gest{display:none}
+@media (max-width:860px){
+.wrap{display:flex!important;flex-direction:column;height:auto!important}
+aside,.right{display:contents!important}
+.g{padding:0 16px}
+.g-head{order:1;padding-top:20px}.g-head h1{font-size:25px;line-height:1.1}.g-head .lead6{margin-bottom:4px}
+.g-quick{order:2}.g-quick .label:first-child{margin-top:14px}
+.g-hint{order:3;margin:14px 0 10px}
+#mapbox{order:4;height:62vh!important;min-height:360px;width:100%}
+.g-filters{order:5;padding-top:6px}
+#charts{order:6;border-top:1px solid var(--line);margin-top:22px}
+.g-docs{order:7;padding-top:8px}
+.g-more{order:8;padding-bottom:44px}
+.same.apt{margin-top:14px}
+.gest{display:block;position:absolute;left:50%;bottom:30px;transform:translateX(-50%);transition:opacity .4s;z-index:650;pointer-events:none;background:rgba(22,22,26,.82);color:#fff;font:700 12px Manrope,sans-serif;padding:7px 12px;border-radius:12px;white-space:nowrap}
+}
 </style></head><body>
 <div class="wrap"><aside>
-<h1>Квартиры и апартаменты посуточно: цены на площадках</h1>
-<p class="lead6">Все объявления шести площадок в шести городах</p><div class="hint"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="6" fill="none" stroke="#16161a" stroke-width="1.8"/><line x1="12" y1="2.5" x2="12" y2="9.5" stroke="#16161a" stroke-width="1.8"/><rect x="6.9" y="3.4" width="5.1" height="6.1" rx="2.5" fill="#16161a"/></svg><span>Нажмите на точку на карте, чтобы увидеть цены в этом доме на всех площадках</span></div>
+<div class="g g-head"><h1>Квартиры и апартаменты посуточно: цены на площадках</h1>
+<p class="lead6">Объявления Яндекс Путешествий, Островка, Суточно.ру и ТВИЛ в шести городах</p></div>
+<div class="g g-hint"><div class="hint"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="6" fill="none" stroke="#16161a" stroke-width="1.8"/><line x1="12" y1="2.5" x2="12" y2="9.5" stroke="#16161a" stroke-width="1.8"/><rect x="6.9" y="3.4" width="5.1" height="6.1" rx="2.5" fill="#16161a"/></svg><span>Нажмите на точку на карте, чтобы увидеть цены в этом доме на всех площадках</span></div></div>
+<div class="g g-docs">
 <a class="cov" href="research.pdf" target="_blank" rel="noopener"><img src="cover.jpg" alt="Обложка исследования рынка"><span><b>Исследование рынка посуточной аренды квартир и апартаментов, 2026</b><em class="cbtn">Открыть PDF</em></span></a>
 <a class="cov" href="sources.pdf" target="_blank" rel="noopener"><img src="sources_cover.jpg" alt="Обложка списка источников презентации"><span><b>Источники презентации</b><em class="cbtn cbtn2">Открыть PDF</em></span></a>
 <a class="cov" href="finmodel.pdf" target="_blank" rel="noopener"><img src="finmodel_cover.jpg" alt="Обложка финансовой модели"><span><b>Финансовая модель: апартаменты в Т-Путешествиях</b><em class="cbtn cbtn2">Открыть PDF</em></span></a>
 <a class="cov cmini" href="method.pdf" target="_blank" rel="noopener"><span><b>Как собран этот сайт</b></span><em class="cbtn cbtn2">Открыть PDF</em></a>
-<div class="label">Город</div><div class="tabs" id="cities"></div>
-<label class="same"><input type="checkbox" id="onlySame"> Только одинаковые объекты</label>
+</div>
+<div class="g g-quick"><div class="label">Город</div><div class="tabs" id="cities"></div>
+<label class="same apt"><input type="checkbox" id="onlyApt"> Только апартаменты</label><div class="cap">Пометка «апартаменты» есть у Яндекс Путешествий, Островка и Суточно.ру, у ТВИЛ ее нет</div>
+<div class="label">На карте сейчас</div>
+<div class="kpis"><div><div class="big" id="kN">0</div><div class="cap" id="kNc">объявлений</div></div><div><div class="big" id="kM">0</div><div class="cap">медиана, ₽ за ночь</div></div></div></div>
+<div class="g g-filters"><label class="same"><input type="checkbox" id="onlySame"> Только одинаковые объекты</label>
 <div class="cap" id="sameCap"></div>
 <div class="label">Площадки</div><div class="opts" id="pls"></div>
-<div class="label">Что показать</div>
-<div class="opts"><label><input type="radio" name="kind" value="all" checked> Квартиры и апартаменты</label><label><input type="radio" name="kind" value="apt"> Только апартаменты</label></div>
 <div class="label">Цена</div>
 <div class="opts"><label><input type="radio" name="pmode" value="any" checked> Любые даты</label><label><input type="radio" name="pmode" value="w0"> Только на 6–8 ноября</label></div>
 <div class="label">Цвет точек</div>
 <div class="opts"><label><input type="radio" name="color" value="pl" checked> По площадке</label><label><input type="radio" name="color" value="price"> По цене</label></div>
-<div class="label">Цена за ночь до</div><input type="range" id="maxp" min="2000" max="30000" step="500" value="30000"><div class="rangeval" id="maxpv"></div>
-<div class="label">На карте сейчас</div>
-<div class="kpis"><div><div class="big" id="kN">0</div><div class="cap" id="kNc">объявлений</div></div><div><div class="big" id="kM">0</div><div class="cap">медиана, ₽ за ночь</div></div></div>
-<div class="label" id="tblLabel">Площадки в городе</div><table id="tbl"></table>
+<div class="label">Цена за ночь до</div><input type="range" id="maxp" min="2000" max="30000" step="500" value="30000"><div class="rangeval" id="maxpv"></div></div>
+<div class="g g-more"><div class="label" id="tblLabel">Площадки в городе</div><table id="tbl"></table>
 <div class="label">Поезда между городами</div><table id="trains"></table><div class="cap">Поезд туда в пятницу 6 ноября, самый дешёвый билет на этот поезд, tutu.ru на 19 октября. Самолёт: минимальная цена «от» на 18 октября без привязки к дате, aviasales.ru.</div>
 <div class="label">Как собрано</div><div class="note" id="notes"></div>
-<div class="label">Источники</div><div id="sources"></div>
+<div class="label">Источники</div><div id="sources"></div></div>
 </aside>
 <div class="right"><div id="mapbox"><div id="map"></div><div id="tip"></div><div id="loading" style="display:none">Загружаю данные…</div><div class="legend" id="legend"><div id="lgt">Цена за ночь</div><div class="bar" id="lgbar"></div><div class="ends"><span id="lg0">2 000</span><span id="lg1">18 000+</span></div></div></div>
 <div id="charts"><div><h3>Распределение цен за ночь</h3><div id="ch1"></div></div><div><h3>Один объект: где дороже</h3><div class="cap" id="ch2c"></div><div id="ch2"></div></div><div><h3>Разброс цен внутри дома</h3><div class="cap" id="ch3c"></div><div id="ch3"></div></div></div></div></div>
@@ -818,6 +838,7 @@ function url(p,c){const k=p[9],w=p[4]<5?p[4]:0,ci=DATA.citymeta[c];
 let city=0,kind='all',pmode='any',colorMode='pl',maxp=30000,on=[1,1,1,1,1,1],same=false;
 let P=[],G=[],cache={};
 const map=L.map('map',{preferCanvas:true,zoomControl:true,zoomSnap:.25,zoomDelta:.5,wheelPxPerZoomLevel:90,maxZoom:20});
+if(window.matchMedia&&matchMedia('(max-width:860px)').matches&&L.Browser.touch){map.dragging.disable();const g=document.createElement('div');g.className='gest';g.textContent='Двумя пальцами — двигать и приближать карту';document.getElementById('mapbox').appendChild(g);map.once('zoomstart',()=>{g.style.opacity=0})}
 map.attributionControl.remove();
 const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;const isDark=()=>!!(mq&&mq.matches);
 const STY=()=>'https://tiles.openfreemap.org/styles/dark';
@@ -868,7 +889,7 @@ DATA.cities.forEach((c,i)=>{const b=document.createElement('button');if(ARMS[c[0
 const AB=document.createElement('button');AB.className='allmap';AB.innerHTML='Посмотреть всю карту<span>все города и как между ними добраться</span>';AB.onclick=()=>{city=-1;go(true)};cb.parentNode.insertBefore(AB,cb.nextSibling);
 const pls=document.getElementById('pls');
 PL.forEach((n,i)=>{const l=document.createElement('label');l.innerHTML=`<input type="checkbox" checked> <span class="c${i}">${n}</span><span class="cnt" id="pc${i}"></span>`;l.querySelector('input').onchange=e=>{on[i]=e.target.checked?1:0;go()};pls.appendChild(l)});
-document.querySelectorAll('input[name=kind]').forEach(r=>r.onchange=()=>{kind=r.value;go()});
+const AP=document.getElementById('onlyApt');AP.onchange=()=>{kind=AP.checked?'apt':'all';go()};
 document.querySelectorAll('input[name=pmode]').forEach(r=>r.onchange=()=>{pmode=r.value;go()});
 document.querySelectorAll('input[name=color]').forEach(r=>r.onchange=()=>{colorMode=r.value;go()});
 document.getElementById('onlySame').onchange=e=>{same=e.target.checked;go()};
